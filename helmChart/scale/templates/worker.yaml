@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op1
+spec:
+  containers:
+  - name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op1
+    image: wakeup706/tensorflow-scale:{{ .Values.operator.op1.device.type }}-worker
+    ports:
+    - containerPort: {{ .Values.operator.op1.port }}
+      hostPort: {{ .Values.operator.op1.port }}
+    command: ["/bin/bash","-c","python worker.py --worker_hosts={{ .Values.operator.op0.ip }}:{{ .Values.operator.op0.port }},{{ .Values.operator.op1.ip }}:{{ .Values.operator.op1.port }},{{ .Values.operator.op2.ip }}:{{ .Values.operator.op2.port }},{{ .Values.operator.op3.ip }}:{{ .Values.operator.op3.port }},{{ .Values.operator.op4.ip }}:{{ .Values.operator.op4.port }} --job_name=worker --task_index=1"]
+    securityContext:
+      privileged: true
+  nodeSelector:
+    device: "{{ .Values.operator.op1.device.label }}"
+
+------
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op2
+spec:
+  containers:
+  - name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op2
+    image: wakeup706/tensorflow-scale:{{ .Values.operator.op2.device.type }}-worker
+    ports:
+    - containerPort: {{ .Values.operator.op2.port }}
+      hostPort: {{ .Values.operator.op2.port }}
+    command: ["/bin/bash","-c","python worker.py --worker_hosts={{ .Values.operator.op0.ip }}:{{ .Values.operator.op0.port }},{{ .Values.operator.op1.ip }}:{{ .Values.operator.op1.port }},{{ .Values.operator.op2.ip }}:{{ .Values.operator.op2.port }},{{ .Values.operator.op3.ip }}:{{ .Values.operator.op3.port }},{{ .Values.operator.op4.ip }}:{{ .Values.operator.op4.port }} --job_name=worker --task_index=2"]
+    securityContext:
+      privileged: true
+  nodeSelector:
+    device: "{{ .Values.operator.op2.device.label }}"
+
+------
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op3
+spec:
+  containers:
+  - name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op3
+    image: wakeup706/tensorflow-scale:{{ .Values.operator.op3.device.type }}-worker
+    ports:
+    - containerPort: {{ .Values.operator.op3.port }}
+      hostPort: {{ .Values.operator.op3.port }}
+    command: ["/bin/bash","-c","python worker.py --worker_hosts={{ .Values.operator.op0.ip }}:{{ .Values.operator.op0.port }},{{ .Values.operator.op1.ip }}:{{ .Values.operator.op1.port }},{{ .Values.operator.op2.ip }}:{{ .Values.operator.op2.port }},{{ .Values.operator.op3.ip }}:{{ .Values.operator.op3.port }},{{ .Values.operator.op4.ip }}:{{ .Values.operator.op4.port }} --job_name=worker --task_index=3"]
+    securityContext:
+      privileged: true
+  nodeSelector:
+    device: "{{ .Values.operator.op3.device.label }}"
+
+------
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op4
+spec:
+  containers:
+  - name: req{{ .Values.name.request }}-app{{ .Values.name.application }}-op4
+    image: wakeup706/tensorflow-scale:{{ .Values.operator.op4.device.type }}-worker
+    ports:
+    - containerPort: {{ .Values.operator.op4.port }}
+      hostPort: {{ .Values.operator.op4.port }}
+    command: ["/bin/bash","-c","python worker.py --worker_hosts={{ .Values.operator.op0.ip }}:{{ .Values.operator.op0.port }},{{ .Values.operator.op1.ip }}:{{ .Values.operator.op1.port }},{{ .Values.operator.op2.ip }}:{{ .Values.operator.op2.port }},{{ .Values.operator.op3.ip }}:{{ .Values.operator.op3.port }},{{ .Values.operator.op4.ip }}:{{ .Values.operator.op4.port }} --job_name=worker --task_index=4"]
+    securityContext:
+      privileged: true
+  nodeSelector:
+    device: "{{ .Values.operator.op4.device.label }}"

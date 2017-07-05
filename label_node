@@ -1,0 +1,11 @@
+#!/bin/bash
+kubectl label node nmsl1 device=0 --overwrite
+kubectl label node nmsl2 device=1 --overwrite
+kubectl label node nmsl3 device=2 --overwrite
+kubectl label node nmsl4 device=3 --overwrite
+kubectl label node nmsl5 device=4 --overwrite
+kubectl label node rpi1 device=5 --overwrite
+kubectl label node rpi2 device=6 --overwrite
+kubectl label node rpi3 device=7 --overwrite
+kubectl label node rpi4 device=8 --overwrite
+kubectl label node rpi5 device=9 --overwrite

@@ -1,0 +1,11 @@
+#!/bin/bash
+#iterate the file, and delete those helm releases
+while read p; do
+   helm del --purge $p
+done <deploy_request
+
+echo 'clean deploy_request'
+> deploy_request
+
+echo 'clean container_list.txt'
+> container_list.txt
