@@ -13,15 +13,15 @@ def helm_record(request_name):
     f.close()
 
 def container_record(op,reqIndex,app,qos):
-    print op
+    #print op
     f = open('container_list.txt', 'a')
     for i in range(len(op)):
-        insert_data = "%s@%s,req%s-app%s-op%s,%s,%s,%s,%s,%s,%s,%s" % \
-            (device['device'][op[0][3]]['host'],device['device'][op[0][3]]['ip'], \
-            str(reqIndex), str(app), str(i), \
-            device['device'][op[0][3]]['iface'], \
+        insert_data = "%s@%s,req%s-app%s-op%s-%s,%s,%s,%s,%s,%s,%s,%s" % \
+            (device['device'][op[i][3]]['username'],device['device'][op[i][3]]['ip'], \
+            str(reqIndex), str(app), str(i), device['device'][op[i][3]]['hostname'], \
+            device['device'][op[i][3]]['iface'], \
             str(8000+int(reqIndex)*10+i), \
-            device['device'][op[0][3]]['type'], \
+            device['device'][op[i][3]]['type'], \
             application[app][0],
             str(i),
             str(qos),
@@ -39,7 +39,7 @@ def parseReq(filename):
     reqIndex = 0
     app = 0
     qos = 0
-    for i in range(len(content)-1):
+    for i in range(len(content)):
         line = [x.strip() for x in content[i].split(',')]
         if line[0][0]=='#':
             continue
@@ -76,20 +76,31 @@ def deployApp(op,reqIndex,app,qos):
 
     global device
     if app == 0 :
-        command='helm install --name %s\
+
+        command='helm install --name %s \
         --set name.request=%s,name.application=%s,period=%s \
         --set mqtt.brokerIP="192.168.0.99",mqtt.topic=iot-1/d/b827ebdf52bd/evt/# \
         --set operator.op0.ip=%s,operator.op0.port=%s,operator.op0.device.type=%s,operator.op0.device.label=%s \
+        --set operator.op0.device.hostname=%s,operator.op0.resource.cpu=%s,operator.op0.resource.mem=%s \
         --set operator.op1.ip=%s,operator.op1.port=%s,operator.op1.device.type=%s,operator.op1.device.label=%s \
+        --set operator.op1.device.hostname=%s,operator.op1.resource.cpu=%s,operator.op1.resource.mem=%s \
         --set operator.op2.ip=%s,operator.op2.port=%s,operator.op2.device.type=%s,operator.op2.device.label=%s \
+        --set operator.op2.device.hostname=%s,operator.op2.resource.cpu=%s,operator.op2.resource.mem=%s \
         --set operator.op3.ip=%s,operator.op3.port=%s,operator.op3.device.type=%s,operator.op3.device.label=%s \
-        --set operator.op4.ip=%s,operator.op4.port=%s,operator.op4.device.type=%s,operator.op4.device.label=%s helmChart/scale/' \
+        --set operator.op3.device.hostname=%s,operator.op3.resource.cpu=%s,operator.op3.resource.mem=%s \
+        --set operator.op4.ip=%s,operator.op4.port=%s,operator.op4.device.type=%s,operator.op4.device.label=%s \
+        --set operator.op4.device.hostname=%s,operator.op4.resource.cpu=%s,operator.op4.resource.mem=%s helmChart/scale/' \
         % (helm_name,reqIndex,app,qos, \
         device['device'][op[0][3]]['ip'], port_base+0, device['device'][op[0][3]]['type'], op[0][3], \
+        device['device'][op[0][3]]['hostname'],str(float(op[0][4])*10).split('.')[0],op[0][5].split('.')[0], \
         device['device'][op[1][3]]['ip'], port_base+1, device['device'][op[1][3]]['type'], op[1][3], \
+        device['device'][op[1][3]]['hostname'],str(float(op[1][4])*10).split('.')[0],op[1][5].split('.')[0], \
         device['device'][op[2][3]]['ip'], port_base+2, device['device'][op[2][3]]['type'], op[2][3], \
+        device['device'][op[2][3]]['hostname'],str(float(op[2][4])*10).split('.')[0],op[2][5].split('.')[0], \
         device['device'][op[3][3]]['ip'], port_base+3, device['device'][op[3][3]]['type'], op[3][3], \
-        device['device'][op[4][3]]['ip'], port_base+4, device['device'][op[4][3]]['type'], op[4][3]
+        device['device'][op[3][3]]['hostname'],str(float(op[3][4])*10).split('.')[0],op[3][5].split('.')[0], \
+        device['device'][op[4][3]]['ip'], port_base+4, device['device'][op[4][3]]['type'], op[4][3], \
+        device['device'][op[4][3]]['hostname'],str(float(op[4][4])*10).split('.')[0],op[4][5].split('.')[0]
         )
         #print "command:"
         os.system(command)
@@ -100,12 +111,18 @@ def deployApp(op,reqIndex,app,qos):
         --set name.request=%s,name.application=%s,period=%s \
         --set mqtt.brokerIP="192.168.0.99", \
         --set operator.op0.ip=%s,operator.op0.port=%s,operator.op0.device.type=%s,operator.op0.device.label=%s \
+        --set operator.op0.device.hostname=%s,operator.op0.resource.cpu=%s,operator.op0.resource.mem=%s \
         --set operator.op1.ip=%s,operator.op1.port=%s,operator.op1.device.type=%s,operator.op1.device.label=%s \
-        --set operator.op2.ip=%s,operator.op2.port=%s,operator.op2.device.type=%s,operator.op2.device.label=%s  helmChart/yolo/' \
+        --set operator.op1.device.hostname=%s,operator.op1.resource.cpu=%s,operator.op1.resource.mem=%s \
+        --set operator.op2.ip=%s,operator.op2.port=%s,operator.op2.device.type=%s,operator.op2.device.label=%s \
+        --set operator.op2.device.hostname=%s,operator.op2.resource.cpu=%s,operator.op2.resource.mem=%s  helmChart/yolo/' \
         % (helm_name,reqIndex,app,qos, \
         device['device'][op[0][3]]['ip'], port_base+0, device['device'][op[0][3]]['type'], op[0][3], \
+        device['device'][op[0][3]]['hostname'],str(float(op[0][4])*10).split('.')[0],op[0][5].split('.')[0], \
         device['device'][op[1][3]]['ip'], port_base+1, device['device'][op[1][3]]['type'], op[1][3], \
-        device['device'][op[2][3]]['ip'], port_base+2, device['device'][op[2][3]]['type'], op[2][3]
+        device['device'][op[1][3]]['hostname'],str(float(op[1][4])*10).split('.')[0],op[1][5].split('.')[0], \
+        device['device'][op[2][3]]['ip'], port_base+2, device['device'][op[2][3]]['type'], op[2][3], \
+        device['device'][op[2][3]]['hostname'],str(float(op[2][4])*10).split('.')[0],op[2][5].split('.')[0]
         )
         #print "command:"
         os.system(command)
@@ -116,16 +133,26 @@ def deployApp(op,reqIndex,app,qos):
         --set name.request=%s,name.application=%s,period=%s \
         --set mqtt.brokerIP="192.168.0.99", \
         --set operator.op0.ip=%s,operator.op0.port=%s,operator.op0.device.type=%s,operator.op0.device.label=%s \
+        --set operator.op0.device.hostname=%s,operator.op0.resource.cpu=%s,operator.op0.resource.mem=%s \
         --set operator.op1.ip=%s,operator.op1.port=%s,operator.op1.device.type=%s,operator.op1.device.label=%s \
+        --set operator.op1.device.hostname=%s,operator.op1.resource.cpu=%s,operator.op1.resource.mem=%s \
         --set operator.op2.ip=%s,operator.op2.port=%s,operator.op2.device.type=%s,operator.op2.device.label=%s \
+        --set operator.op2.device.hostname=%s,operator.op2.resource.cpu=%s,operator.op2.resource.mem=%s \
         --set operator.op3.ip=%s,operator.op3.port=%s,operator.op3.device.type=%s,operator.op3.device.label=%s \
-        --set operator.op4.ip=%s,operator.op4.port=%s,operator.op4.device.type=%s,operator.op4.device.label=%s helmChart/audio/' \
+        --set operator.op3.device.hostname=%s,operator.op3.resource.cpu=%s,operator.op3.resource.mem=%s \
+        --set operator.op4.ip=%s,operator.op4.port=%s,operator.op4.device.type=%s,operator.op4.device.label=%s \
+        --set operator.op4.device.hostname=%s,operator.op4.resource.cpu=%s,operator.op4.resource.mem=%s helmChart/audio/' \
         % (helm_name,reqIndex,app,qos, \
         device['device'][op[0][3]]['ip'], port_base+0, device['device'][op[0][3]]['type'], op[0][3], \
+        device['device'][op[0][3]]['hostname'],str(float(op[0][4])*10).split('.')[0],op[0][5].split('.')[0], \
         device['device'][op[1][3]]['ip'], port_base+1, device['device'][op[1][3]]['type'], op[1][3], \
+        device['device'][op[1][3]]['hostname'],str(float(op[1][4])*10).split('.')[0],op[1][5].split('.')[0], \
         device['device'][op[2][3]]['ip'], port_base+2, device['device'][op[2][3]]['type'], op[2][3], \
+        device['device'][op[2][3]]['hostname'],str(float(op[2][4])*10).split('.')[0],op[2][5].split('.')[0], \
         device['device'][op[3][3]]['ip'], port_base+3, device['device'][op[3][3]]['type'], op[3][3], \
-        device['device'][op[4][3]]['ip'], port_base+4, device['device'][op[4][3]]['type'], op[4][3]
+        device['device'][op[3][3]]['hostname'],str(float(op[3][4])*10).split('.')[0],op[3][5].split('.')[0], \
+        device['device'][op[4][3]]['ip'], port_base+4, device['device'][op[4][3]]['type'], op[4][3], \
+        device['device'][op[4][3]]['hostname'],str(float(op[4][4])*10).split('.')[0],op[4][5].split('.')[0]
         )
         #print "command:"
         os.system(command)
@@ -138,5 +165,5 @@ def deployApp(op,reqIndex,app,qos):
     print "------\n\n"
 
 if __name__ == "__main__":
-    os.system("mosquitto_sub -h 192.168.0.99 -t lab/# > output 2>&1 &")
+    #os.system("mosquitto_sub -h 192.168.0.99 -t lab/# > output 2>&1 &")
     parseReq(sys.argv[1])

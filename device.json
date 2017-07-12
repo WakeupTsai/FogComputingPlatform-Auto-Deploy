@@ -1,61 +1,71 @@
 {
   "device": {
     "0": {
-      "host": "nmsl",
+      "username": "anjie",
+      "hostname": "nmsl1",
       "type": "pc",
       "ip": "192.168.0.1",
       "iface": "eth0"
     },
     "1": {
-      "host": "nmsl2",
+      "username": "anjie",
+      "hostname": "nmsl2",
       "type": "pc",
       "ip": "192.168.0.2",
       "iface": "eth0"
     },
     "2": {
-      "host": "nmsl3",
+      "username": "anjie",
+      "hostname": "nmsl3",
       "type": "pc",
       "ip": "192.168.0.3",
       "iface": "eth0"
     },
     "3": {
-      "host": "nmsl4",
+      "username": "anjie",
+      "hostname": "nmsl4",
       "type": "pc",
       "ip": "192.168.0.4",
       "iface": "eth0"
     },
     "4": {
-      "host": "nmsll5",
+      "username": "anjie",
+      "hostname": "nmsl5",
       "type": "pc",
       "ip": "192.168.0.5",
       "iface": "eth0"
     },
     "5": {
-      "host": "rpi1",
+      "username": "pirate",
+      "hostname": "rpi1",
       "type": "rpi",
       "ip": "192.168.0.11",
       "iface": "eth0"
     },
     "6": {
-      "host": "rpi2",
+      "username": "pirate",
+      "hostname": "rpi2",
       "type": "rpi",
       "ip": "192.168.0.12",
       "iface": "eth0"
     },
     "7": {
-      "host": "rpi3",
+      "username": "pirate",
+      "hostname": "rpi3",
       "type": "rpi",
       "ip": "192.168.0.13",
       "iface": "eth0"
     },
     "8": {
-      "host": "rpi4",
+      "username": "pirate",
+      "hostname": "rpi4",
       "type": "rpi",
       "ip": "192.168.0.14",
       "iface": "eth0"
     },
     "9": {
-      "host": "rpi5",
+      "username": "pirate",
+      "hostname": "rpi5",
       "type": "rpi",
       "ip": "192.168.0.15",
       "iface": "eth0"
